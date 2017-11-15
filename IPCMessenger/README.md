@@ -1,0 +1,3 @@
+#Messegner进程通信
+
+通过Messenger完成一个service和activity的进程通信过程。
