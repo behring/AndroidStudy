@@ -7,6 +7,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.widget.Toast;
 
 /**
@@ -15,15 +16,19 @@ import android.widget.Toast;
 
 public class LibService extends Service {
     private static final String TAG = LibService.class.getSimpleName();
-    private static final int MSG_SAY_HELLO = 1;
+    private static final int MSG_ALONE_PROCESS_SERVICE = 1;
+    private static final int MSG_LIB_SERVICE = 2;
     private final Messenger messenger = new Messenger(new ServiceHandler());
 
     private class ServiceHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case MSG_SAY_HELLO:
-                    Toast.makeText(getApplicationContext(), msg.obj.toString(), Toast.LENGTH_SHORT).show();
+                case MSG_ALONE_PROCESS_SERVICE:
+                    Toast.makeText(getApplicationContext(), "alone process service", Toast.LENGTH_SHORT).show();
+                    break;
+                case MSG_LIB_SERVICE:
+                    Toast.makeText(getApplicationContext(), "lib service", Toast.LENGTH_SHORT).show();
                     break;
                 default:
                     super.handleMessage(msg);
@@ -35,5 +40,11 @@ public class LibService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return messenger.getBinder();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG,"==========>destroy" + TAG);
     }
 }

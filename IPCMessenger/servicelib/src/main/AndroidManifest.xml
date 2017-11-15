@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.thoughtworks.linzhao.servicelib">
     <application>
-        <service android:name=".LibService"/>
+        <service android:name=".LibService"
+            android:process=":lib_service"/>
     </application>
 </manifest>

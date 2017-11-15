@@ -19,7 +19,7 @@
 
         <service
             android:name=".AloneProcessService"
-            android:process=":remote"/>
+            android:process=":alone_process_service"/>
     </application>
 
 </manifest>
