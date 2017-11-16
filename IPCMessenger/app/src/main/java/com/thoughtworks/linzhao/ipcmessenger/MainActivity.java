@@ -21,18 +21,53 @@ public class MainActivity extends AppCompatActivity {
     private static final int MSG_LIB_SERVICE = 2;
 
     private Messenger mService = null;
-    private boolean mBound = false;
-    private ServiceConnection mConnection = new ServiceConnection() {
+    private Messenger mLibService = null;
+    private LocalService mLocalService = null;
+
+    private boolean mServiceBound = false;
+    private boolean mLibServiceBound = false;
+    private boolean mLocalServiceBound = false;
+
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             mService = new Messenger(service);
-            mBound = true;
+            mServiceBound = true;
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
             mService = null;
-            mBound = false;
+            mServiceBound = false;
+        }
+    };
+
+    private ServiceConnection mLibServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mLibService = new Messenger(service);
+            mLibServiceBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mService = null;
+            mLibServiceBound = false;
+        }
+    };
+
+    private ServiceConnection mLocalServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            LocalService.LocalBinder binder = (LocalService.LocalBinder) service;
+            mLocalService = binder.getService();
+            mLocalServiceBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mLocalService = null;
+            mLocalServiceBound = false;
         }
     };
 
@@ -54,18 +89,18 @@ public class MainActivity extends AppCompatActivity {
 
     public void bindAloneProcessService(View v) {
         Intent intent = new Intent(this, AloneProcessService.class);
-        bindService(intent, mConnection, BIND_AUTO_CREATE);
+        bindService(intent, mServiceConnection, BIND_AUTO_CREATE);
     }
 
     public void unbindAloneProcessService(View v) {
-        if(mBound) {
-            unbindService(mConnection);
-            mBound = false;
+        if(mServiceBound) {
+            unbindService(mServiceConnection);
+            mServiceBound = false;
         }
     }
 
     public void callAloneProcessService(View v) {
-        if(!mBound) return;
+        if(!mServiceBound) return;
         Message message = Message.obtain(null, MSG_ALONE_PROCESS_SERVICE);
         try {
             mService.send(message);
@@ -77,23 +112,40 @@ public class MainActivity extends AppCompatActivity {
 
     public void bindLibService(View v) {
         Intent intent = new Intent(this, LibService.class);
-        bindService(intent, mConnection, BIND_AUTO_CREATE);
+        bindService(intent, mLibServiceConnection, BIND_AUTO_CREATE);
     }
 
     public void unbindLibService(View v) {
-        if(mBound) {
-            unbindService(mConnection);
-            mBound = false;
+        if(mLibServiceBound) {
+            unbindService(mLibServiceConnection);
+            mLibServiceBound = false;
         }
     }
 
     public void callLibService(View v) {
-        if(!mBound) return;
+        if(!mLibServiceBound) return;
         Message message = Message.obtain(null, MSG_LIB_SERVICE);
         try {
-            mService.send(message);
+            mLibService.send(message);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+    }
+
+    public void bindLocalService(View v) {
+        Intent intent = new Intent(this, LocalService.class);
+        bindService(intent, mLocalServiceConnection, BIND_AUTO_CREATE);
+    }
+
+    public void unbindLocalService(View v) {
+        if(mLocalServiceBound) {
+            unbindService(mLocalServiceConnection);
+            mLocalServiceBound = false;
+        }
+    }
+
+    public void callLocalService(View v) {
+        if(!mLocalServiceBound) return;
+        mLocalService.getRandomNumber();
     }
 }

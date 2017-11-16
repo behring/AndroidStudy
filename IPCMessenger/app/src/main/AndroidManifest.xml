@@ -20,6 +20,9 @@
         <service
             android:name=".AloneProcessService"
             android:process=":alone_process_service"/>
+
+        <service
+            android:name=".LocalService"/>
     </application>
 
 </manifest>

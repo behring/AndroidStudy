@@ -60,4 +60,31 @@
             android:onClick="callLibService"
             />
     </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="BindLocalService"
+            android:onClick="bindLocalService"
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="unbindLocalService"
+            android:onClick="unbindLocalService"
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="CallLocalService"
+            android:onClick="callLocalService"
+            />
+    </LinearLayout>
 </LinearLayout>
